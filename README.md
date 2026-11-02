@@ -50,6 +50,16 @@ VSCode `mcp.json`:
 }
 ```
 
+## Add to Claude Code (macOS/Linux)
+
+User scope (available in all your projects):
+
+```bash
+claude mcp add-json -s user google-image-search-java '{"type":"stdio","command":"java","args":["-jar","/path/to/google-image-search-mcp-java-1.0.0.jar"],"env":{"SERP_API_KEY":"your_api_key_here"}}'
+```
+
+Use `-s project` instead to store it in the project's `.mcp.json`, or `-s local` (default) for the current project only. Check it with `claude mcp list`.
+
 ## Add to Claude Code (Windows)
 
 Replace the paths with the location of your jar.
