@@ -50,6 +50,24 @@ VSCode `mcp.json`:
 }
 ```
 
+## Add to Claude Code (Windows)
+
+Replace the paths with the location of your jar.
+
+Passing the key directly:
+
+```powershell
+claude mcp add google-image-search-java --env SERP_API_KEY=your_api_key_here -- java -jar C:/Users/YOURUSERNAME/google-image-search-mcp-java/target/google-image-search-mcp-java-1.0.0.jar
+```
+
+Or reading it from the `.env` file in the project folder (Claude Code starts the server from the directory where you ran `claude`, so the command first changes into the project folder):
+
+```powershell
+claude mcp add google-image-search-java -- cmd /c "cd /d C:\Users\YOURUSERNAME\google-image-search-mcp-java && java -jar target\google-image-search-mcp-java-1.0.0.jar"
+```
+
+Add `--scope user` right after `add` to make the server available in all your projects. Check it with `claude mcp list` or `/mcp` inside Claude Code.
+
 ## Tools
 
 1. `search_images_tool(query, limit=10)`: search Google Images via SerpAPI.
