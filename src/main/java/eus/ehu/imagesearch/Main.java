@@ -13,7 +13,6 @@ import io.modelcontextprotocol.server.McpServerFeatures.SyncToolSpecification;
 import io.modelcontextprotocol.server.McpSyncServer;
 import io.modelcontextprotocol.server.transport.StdioServerTransportProvider;
 import io.modelcontextprotocol.spec.McpSchema.CallToolResult;
-import io.modelcontextprotocol.spec.McpSchema.JsonSchema;
 import io.modelcontextprotocol.spec.McpSchema.ServerCapabilities;
 import io.modelcontextprotocol.spec.McpSchema.Tool;
 
@@ -47,14 +46,12 @@ public class Main {
     // ---- search_images_tool ------------------------------------------------
 
     private static SyncToolSpecification searchTool(ImageApi api) {
-        Tool tool = Tool.builder()
-                .name("search_images_tool")
-                .description("Search for images using Google Image Search")
-                .inputSchema(schema(
+        Tool tool = Tool.builder("search_images_tool", schema(
                         Map.of(
                                 "query", prop("string", "The search query for finding images"),
                                 "limit", prop("integer", "Maximum number of results to return (default: 10)")),
                         List.of("query")))
+                .description("Search for images using Google Image Search")
                 .build();
 
         return SyncToolSpecification.builder().tool(tool).callHandler((exchange, request) -> {
@@ -78,16 +75,14 @@ public class Main {
     // ---- download_image_tool -----------------------------------------------
 
     private static SyncToolSpecification downloadTool(ImageApi api) {
-        Tool tool = Tool.builder()
-                .name("download_image_tool")
-                .description("Download an image to a local directory")
-                .inputSchema(schema(
+        Tool tool = Tool.builder("download_image_tool", schema(
                         Map.of(
                                 "image_url", prop("string", "URL of the image to download"),
                                 "output_path", prop("string", "Directory path where the image should be saved"),
                                 "filename", prop("string",
                                         "Filename for the downloaded image (including extension)")),
                         List.of("image_url", "output_path", "filename")))
+                .description("Download an image to a local directory")
                 .build();
 
         return SyncToolSpecification.builder().tool(tool).callHandler((exchange, request) -> {
@@ -108,8 +103,9 @@ public class Main {
 
     // ---- helpers -----------------------------------------------------------
 
-    private static JsonSchema schema(Map<String, Object> properties, List<String> required) {
-        return new JsonSchema("object", properties, required, false, null, null);
+    private static Map<String, Object> schema(Map<String, Object> properties, List<String> required) {
+        return Map.of("type", "object", "properties", properties, "required", required,
+                "additionalProperties", false);
     }
 
     private static Map<String, Object> prop(String type, String description) {
